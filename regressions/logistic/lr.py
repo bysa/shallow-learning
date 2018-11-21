@@ -31,11 +31,11 @@ final_data['class'].value_counts()
 # plt.show()
 
 
-# final_data.hist(column='sepal_length_cm', bins=20, figsize=(10, 5))
+final_data.hist(column='sepal_length_cm', bins=20, figsize=(10, 5))
 # remove outliests
 final_data.loc[final_data.sepal_length_cm < 1, [
     'sepal_length_cm']] = final_data['sepal_length_cm']*100
-# final_data.hist(column='sepal_length_cm', bins=20, figsize=(10, 5))
+final_data.hist(column='sepal_length_cm', bins=20, figsize=(10, 5))
 final_data = final_data.drop(final_data[(
     final_data['class'] == "Iris-setosa") & (final_data['sepal_width_cm'] < 2.5)].index)
 
@@ -83,7 +83,6 @@ def model_optimize(w, b, X, Y):
     m = X.shape[0]
 
     # Prediction
-    # h.teta (x) = sigmoid(wx + b)
     final_result = sigmoid_activation(np.dot(w, X.T)+b)
     Y_T = Y.T
     cost = (-1/m)*(np.sum((Y_T*np.log(final_result)) +
@@ -142,20 +141,16 @@ w = coeff["w"]
 b = coeff["b"]
 print('Optimized weights', w)
 print('Optimized intercept', b)
-
-# now that our model is trained, time to evaluate it on train and test
-# better approach would be to devide train into corss validation set
+#
 final_train_pred = sigmoid_activation(np.dot(w, X_train.T)+b)
 final_test_pred = sigmoid_activation(np.dot(w, X_test.T)+b)
 #
 m_tr = X_train.shape[0]
 m_ts = X_test.shape[0]
-
-# training error with threshold 50%
+#
 y_tr_pred = predict(final_train_pred, m_tr)
 print('Training Accuracy', accuracy_score(y_tr_pred.T, y_train))
-
-# test error with threshold 50%
+#
 y_ts_pred = predict(final_test_pred, m_ts)
 print('Test Accuracy', accuracy_score(y_ts_pred.T, y_test))
 
@@ -169,7 +164,7 @@ plt.show()
 
 # Sklearn
 clf = LogisticRegression()
-clf.fit(X_train, y_train)
+clf.fit(X_tr_arr, y_tr_arr)
 print(clf.intercept_, clf.coef_)
-pred = clf.predict(X_test)
-print('Accuracy from sk-learn: {0}'.format(clf.score(X_test, y_test)))
+pred = clf.predict(X_ts_arr)
+print('Accuracy from sk-learn: {0}'.format(clf.score(X_ts_arr, y_ts_arr)))
